@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Rviz</string>
+  <string name="add_layer">Add Display</string>
+  <string name="remove_layer">Remove</string>
+  <string name="rename_layer">Rename</string>
+</resources>

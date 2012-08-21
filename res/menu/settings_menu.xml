@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <group android:checkableBehavior="none" >
+        <item
+            android:id="@+id/clear_model_cache"
+            android:orderInCategory="5"
+            android:title="Clear model cache"/>
+    </group>
+
+    <item
+        android:id="@+id/menu_layertoggle"
+        android:checkable="true"
+        android:icon="@drawable/layers"
+        android:orderInCategory="4"
+        android:showAsAction="withText|always"
+        android:title="Layers"/>
+    <!--
+         <item
+        android:id="@+id/menu_spacer"
+        android:orderInCategory="3"
+        android:showAsAction="withText|always"
+        android:enabled="false"
+        android:title="       "/>
+    -->
+    <item
+        android:id="@+id/menu_follow"
+        android:icon="@drawable/lock"
+        android:orderInCategory="2"
+        android:showAsAction="withText|always"
+        android:title="Follow"/>
+
+    <group android:id="@+id/unfollowGroup" >
+        <item
+            android:id="@+id/menu_unfollow"
+            android:icon="@drawable/unlock"
+            android:orderInCategory="1"
+            android:showAsAction="withText|always"
+            android:title="Unfollow"/>
+    </group>
+
+</menu>

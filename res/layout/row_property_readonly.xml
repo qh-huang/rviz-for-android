@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:gravity="fill"
+    android:minHeight="55dp"
+    android:orientation="horizontal"
+    android:weightSum="1.0" >
+
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="30dp"
+        android:layout_marginLeft="2dp"
+        android:layout_height="fill_parent" />
+
+    <TextView
+        android:id="@+id/tvProp_ReadOnly_Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="0dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvProp_ReadOnly_Value"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="28dp"
+        android:textStyle="bold"
+        android:ems="10"
+        android:gravity="right"
+        android:textSize="16sp" />
+
+</LinearLayout>

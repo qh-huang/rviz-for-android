@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:gravity="fill"
+    android:minHeight="55dp"
+    android:orientation="horizontal"
+    android:weightSum="1.0" >
+
+    <TextView
+        android:id="@+id/tvProp_Spinner_Name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="35dp"
+        android:layout_weight="0.5"
+        android:text="TextView"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/spProp_Spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.5" />
+
+</LinearLayout>
