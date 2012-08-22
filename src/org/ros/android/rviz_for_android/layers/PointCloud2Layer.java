@@ -162,6 +162,9 @@ public class PointCloud2Layer extends EditableStatusSubscriberLayer<sensor_msgs.
 	public AvailableLayerType getType() {
 		return AvailableLayerType.PointCloud2;
 	}
-	
-	
+
+	@Override
+	public boolean isEnabled() {
+		return prop.getValue();
+	}
 }

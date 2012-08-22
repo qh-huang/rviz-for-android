@@ -289,7 +289,7 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 	private float[] positionVec = new float[4];
 	private float x3d, y3d, w3d;
 
-	private int[] getScreenPosition(Vector3 position) {
+	private double[] getScreenPosition(Vector3 position) {
 		positionVec[0] = (float) position.getX();
 		positionVec[1] = (float) position.getY();
 		positionVec[2] = (float) position.getZ();
@@ -299,15 +299,16 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 		x3d = resultVec[0];
 		y3d = resultVec[1];
 		w3d = resultVec[2];
-		int[] retval = new int[2];
-		retval[0] = (int) Math.round((x3d * cam.getViewport().getWidth()) / (2.0 * w3d) + (cam.getViewport().getWidth() / 2.0));
-		retval[1] = cam.getViewport().getHeight() - (int) Math.round((y3d * cam.getViewport().getHeight()) / (2.0 * w3d) + (cam.getViewport().getHeight() / 2.0));
+		double[] retval = new double[2];
+		retval[0] = (x3d * cam.getViewport().getWidth()) / (2.0 * w3d) + (cam.getViewport().getWidth() / 2.0);
+		retval[1] = cam.getViewport().getHeight() - ((y3d * cam.getViewport().getHeight()) / (2.0 * w3d) + (cam.getViewport().getHeight() / 2.0));
 		return retval;
 	}
 
 	@Override
 	public int[] getPosition() {
-		return getScreenPosition(ORIGIN);
+		double[] retval = getScreenPosition(ORIGIN);
+		return new int[] { (int) retval[0], (int) retval[1] };
 	}
 
 	@Override
@@ -332,7 +333,7 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 		parentControl.childRotate(deltaQuaternion);
 		parentControl.publish(this, visualization_msgs.InteractiveMarkerFeedback.POSE_UPDATE);
 	}
-	
+
 	private void setMarkerSelection(boolean selected) {
 		for(Marker m : markers)
 			m.setColorAsSelected(selected);
@@ -351,26 +352,13 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 	@Override
 	public void translate(float X, float Y) {
 		if(interactionMode == InteractionMode.MOVE_AXIS) {
-			// Step 1: Project axis of motion to a ray on the screen
-			int[] startpt = getScreenPosition(ORIGIN);
-			int[] endpt = getScreenPosition(XAXIS);
-			Vector2 screenRayDir = new Vector2(endpt[0] - startpt[0], endpt[1] - startpt[1]);
-			Vector2 screenRayStart = new Vector2(startpt[0], startpt[1]);
-
-			// If the axis isn't long enough, abort
-			if(screenRayDir.length() <= 2) {
-				Log.e("InteractiveMarker", "screen ray too short, aborting move axis");
-				return;
-			}
-
-			// Step 2: Find nearest point on the screen ray to the mouse touch point
+			// Step 1: Find nearest point on the screen ray to the mouse touch point
 			Vector2 mousePt = new Vector2(X, Y);
-
 			float num = (mousePt.subtract(screenRayStart)).dot(screenRayDir);
 			float den = screenRayDir.dot(screenRayDir);
 			Vector2 mouseActionPoint = screenRayStart.add(screenRayDir.scalarMultiply(num / den));
 
-			// Step 3: Project the mouse action point into a 3D ray
+			// Step 2: Project the mouse action point into a 3D ray
 			Ray mouseRay = getMouseRay(mouseActionPoint.getX(), mouseActionPoint.getY());
 
 			if(Utility.containsNaN(mouseRay.getDirection()) || Utility.containsNaN(mouseRay.getStart())) {
@@ -382,20 +370,20 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 			Vector3 axisRayEnd = new Vector3(M[0] + M[12], M[1] + M[13], M[2] + M[14]);
 			Ray axisRay = Ray.constructRay(axisRayStart, axisRayEnd);
 
+			// Step 3: Find the intersection point on the plane of motion (constrained to the projected axis of motion) to the mouse ray
 			Vector3 result = axisRay.getClosestPoint(mouseRay);
-			if(result == null) {
-				Log.e("InteractiveMarker", "Rays are parallel!");
+
+			if(result == null || Utility.containsNaN(result)) {
+				Log.e("InteractiveMarker", "Rays are parallel or malformed!");
 				return;
 			}
 
 			parentControl.childTranslate(result);
 			parentControl.publish(this, visualization_msgs.InteractiveMarkerFeedback.POSE_UPDATE);
 		} else if(interactionMode == InteractionMode.MOVE_PLANE || interactionMode == InteractionMode.MOVE_ROTATE) {
-
 			// Step 1: Construct the plane of motion
 			Ray motionPlane;
 			if(isViewFacing) {
-
 				// Find the camera view ray (ray from center of the camera forward)
 				int centerX = cam.getViewport().getWidth() / 2;
 				int centerY = cam.getViewport().getHeight() / 2;
@@ -423,10 +411,10 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 
 	@Override
 	public Vector2 getScreenMotionVector() {
-		int[] startpt = getScreenPosition(ORIGIN);
-		int[] endpt = getScreenPosition(XAXIS);
+		double[] startpt = getScreenPosition(ORIGIN);
+		double[] endpt = getScreenPosition(XAXIS);
 
-		Vector2 screenRayDir = new Vector2(endpt[0] - startpt[0], endpt[1] - startpt[1]);
+		Vector2 screenRayDir = new Vector2((float) (endpt[0] - startpt[0]), (float) (endpt[1] - startpt[1]));
 		return screenRayDir;
 	}
 
@@ -458,5 +446,27 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 	public void setParentOrientation(Quaternion orientation) {
 		if(orientationMode != OrientationMode.FIXED)
 			drawOrientation = orientation.multiply(myOrientation);
+	}
+
+	Vector2 screenRayDir;
+	Vector2 screenRayStart;
+
+	@Override
+	public void translateStart() {
+		// Step 1: Project axis of motion to a ray on the screen (only if this hasn't been done yet)
+		double[] startpt = getScreenPosition(ORIGIN);
+		double[] endpt = getScreenPosition(XAXIS);
+		screenRayDir = new Vector2((float) (endpt[0] - startpt[0]), (float) (endpt[1] - startpt[1])).normalize();
+		screenRayStart = new Vector2((float) startpt[0], (float) startpt[1]);
+
+		// If the axis isn't long enough, abort
+		if(screenRayDir.length() <= 0.5) {
+			Log.e("InteractiveMarker", "screen ray too short, aborting move axis");
+			return;
+		}
+
+		// motionPlane = new Ray(axisRayStart, rotateSecond.rotateAndScaleVector(rotateFirst.rotateAndScaleVector(axisRay.getDirection()))); //Ray(parentControl.getPosition(), Vector3.xAxis());
+		// System.out.println("Axis: " + axisRay);
+		// System.out.println("Motion plane normal: " + motionPlane);
 	}
 }

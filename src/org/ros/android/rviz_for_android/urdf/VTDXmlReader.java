@@ -250,7 +250,7 @@ public abstract class VTDXmlReader {
 	}
 
 	protected float[] toFloatArray(String str) {
-		String[] pieces = str.split(" ");
+		String[] pieces = str.trim().split(" ");
 		float[] retval = new float[pieces.length];
 		for(int i = 0; i < pieces.length; i++) {
 			retval[i] = Float.parseFloat(pieces[i]);

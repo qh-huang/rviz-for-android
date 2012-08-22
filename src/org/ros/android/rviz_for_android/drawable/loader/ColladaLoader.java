@@ -18,6 +18,7 @@
 package org.ros.android.rviz_for_android.drawable.loader;
 
 import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +39,9 @@ import org.ros.android.renderer.shapes.TexturedBufferedTrianglesShape;
 import org.ros.android.renderer.shapes.TrianglesShape;
 import org.ros.android.rviz_for_android.urdf.InvalidXMLException;
 import org.ros.android.rviz_for_android.urdf.ServerConnection;
+import org.ros.android.rviz_for_android.urdf.TgaReader;
+import org.ros.android.rviz_for_android.urdf.TgaReader.ImageTGA;
+import org.ros.android.rviz_for_android.urdf.TgaReader.TGAError;
 import org.ros.android.rviz_for_android.urdf.VTDXmlReader;
 
 import android.content.Context;
@@ -230,27 +234,48 @@ public class ColladaLoader extends VTDXmlReader {
 	private Map<String, ETC1Texture> getTextures(String prefix) {
 		Map<String, ETC1Texture> retval = new HashMap<String, ETC1Texture>();
 
+		String filesDirectory = serverConnection.getContext().getFilesDir().toString() + "/";
+		
 		// Find which types of acceptable textures are present (diffuse, bump, etc)
 		for(textureType t : textureType.values()) {
 			if(attributeExists("/COLLADA/library_effects/", t.toString(), "texture/@texture")) {
 				String texPointer = super.existResult;
+				
+				String filename = null;
+				// If the image library has an image with texPointer's ID, use that
+				// otherwise, follow the pointer trail
+				if(attributeExists("/COLLADA/library_images/image[@id='" + texPointer + "']/init_from")) {
+					filename = super.existResult;
+					Log.d("DAE", "Shortcut to texture name: " + filename);
+				} else {
+					// Locate the image ID from the texture pointer
+					String imgID = getSingleAttribute("/COLLADA/library_effects//newparam[@sid='" + texPointer + "']/sampler2D/source");
+					
+					// Locate the image name
+					String imgName = getSingleAttribute("/COLLADA/library_effects//newparam[@sid='" + imgID + "']/surface/init_from");
+					
+					// Locate the filename
+					filename = getSingleAttribute("/COLLADA/library_images/image[@id='" + imgName + "']/init_from");
+				}
+				
+				Log.d("DAE", "Filename = " + filename);
 
-				// Locate the image ID from the texture pointer
-				String imgID = getSingleAttribute("/COLLADA/library_effects//newparam[@sid='" + texPointer + "']/sampler2D/source");
-
-				// Locate the image name
-				String imgName = getSingleAttribute("/COLLADA/library_effects//newparam[@sid='" + imgID + "']/surface/init_from");
-
-				// Locate the filename
-				String filename = getSingleAttribute("/COLLADA/library_images/image[@id='" + imgName + "']/init_from");
-
+				if(filename.length() == 0)
+					Log.e("DAE", "Filename = 0 length!");
+				
 				// If a cached compressed copy exists, load that. Otherwise, download, compress, and save the image
 				String compressedFilename = "COMPRESSED_" + serverConnection.getSanitizedPrefix(imgPrefix) + filename;
 				if(!serverConnection.fileExists(compressedFilename)) {
 					Log.i("DAE", "No compressed cached copy exists.");
 
-					// Load the uncompressed image
-					Bitmap uncompressed = openTextureFile(serverConnection.getContext().getFilesDir().toString() + "/", serverConnection.getFile(imgPrefix + filename));
+					// Load the uncompressed image			
+					String downloadedFilename = serverConnection.getFile(imgPrefix + filename);
+					Bitmap uncompressed = null;
+					if(downloadedFilename == null) {
+						Log.e("DAE", "Unable to get file " + imgPrefix + filename + " from server!");
+						uncompressed = Bitmap.createBitmap(new int[]{0,0}, 1, 1, Bitmap.Config.RGB_565);
+					} else					
+						uncompressed = openTextureFile(filesDirectory, downloadedFilename);
 
 					// Flip the image
 					Matrix flip = new Matrix();
@@ -311,7 +336,7 @@ public class ColladaLoader extends VTDXmlReader {
 	}
 
 	private ETC1Texture compressBitmap(Bitmap uncompressedBitmap) {
-		// Rescale the bitmap to be half it's current size
+		// Rescale the bitmap to be half its current size
 		Bitmap uncompressedBitmapResize = Bitmap.createScaledBitmap(uncompressedBitmap, uncompressedBitmap.getWidth() / 4, uncompressedBitmap.getHeight() / 4, true);
 		uncompressedBitmap.recycle();
 
@@ -338,6 +363,7 @@ public class ColladaLoader extends VTDXmlReader {
 
 	private Bitmap openTextureFile(String path, String filename) {
 		Bitmap retval = null;
+		Log.d("DAE", "Opening texture file " + path + filename);
 		if(filename.toLowerCase().endsWith(".tif")) {
 			Log.d("DAE", "Loading TIF image: " + path + filename);
 			TiffDecoder.nativeTiffOpen(path + filename);
@@ -346,6 +372,30 @@ public class ColladaLoader extends VTDXmlReader {
 			int height = TiffDecoder.nativeTiffGetHeight();
 			retval = Bitmap.createBitmap(pixels, width, height, Bitmap.Config.RGB_565);
 			TiffDecoder.nativeTiffClose();
+		} else if(filename.toLowerCase().endsWith(".tga")) {
+			Log.d("DAE", "Loading TGA image: " + path + filename);
+			InputStream tgaStream;
+			try {
+				tgaStream = new FileInputStream(path + filename);
+				ImageTGA loaded = TgaReader.load(tgaStream);
+				if(loaded.status != TGAError.TGA_OK) {
+					Log.e("DAE", "TGA error: " + loaded.status);
+					return null;
+				}
+				int[] imgData = new int[loaded.imageData.length];
+				for(int i = 0; i < imgData.length; i++)
+					imgData[i] = loaded.imageData[i];
+				
+				retval = Bitmap.createBitmap(imgData, loaded.width, loaded.height, Bitmap.Config.ARGB_8888);
+				
+				imgData = null;
+				TgaReader.destroy(loaded);				
+			} catch(FileNotFoundException e) {
+				e.printStackTrace();
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			
 		} else {
 			Log.d("DAE", "Loading non-TIF image: " + path + filename);
 			retval = BitmapFactory.decodeFile(path + filename);

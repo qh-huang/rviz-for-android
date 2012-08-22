@@ -216,7 +216,7 @@ public class MapLayer extends EditableStatusSubscriberLayer<nav_msgs.OccupancyGr
 		} else {
 			AssetManager am = context.getAssets();
 			try {
-				mapImage = BitmapFactory.decodeStream(am.open("hidden.jpg"));
+				mapImage = BitmapFactory.decodeStream(am.open("hidden.dat"));
 			} catch(IOException e) {
 				e.printStackTrace();
 			}

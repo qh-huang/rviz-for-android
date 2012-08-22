@@ -24,6 +24,9 @@ public class Translation2DControlView extends View implements OnGestureListener 
 		@Override
 		public void onMove(float X, float Y) {
 		}
+		@Override
+		public void onMoveStart() {	
+		}
 	};
 
 	private static final OnMouseUpListener DEFAULT_ONUP_LISTENER = new OnMouseUpListener() {

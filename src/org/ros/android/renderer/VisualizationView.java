@@ -28,6 +28,7 @@ import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
 import org.ros.rosjava_geometry.FrameTransformTree;
 
+import std_msgs.Header;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
@@ -43,16 +44,18 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 
 	private static final int TF_MESSAGE_QUEUE = 5;
 
+	private static final String TF_TOPIC = "tf"; // "tf_throttled";
+
 	private RenderRequestListener renderRequestListener;
-	
+
 	private FrameTransformTree frameTransformTree;
-	
+
 	private Camera camera;
 	private VisViewRenderer renderer;
 	private List<Layer> layers;
 	private ConnectedNode connectedNode;
 	private final AvailableFrameTracker frameTracker = new AvailableFrameTracker();
-	
+
 	public VisualizationView(Context context) {
 		super(context);
 		init();
@@ -76,7 +79,7 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 		layers = Lists.newArrayList();
 		setEGLConfigChooser(8, 8, 8, 8, 8, 8);
 		setEGLContextClientVersion(2);
-		
+
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		setRenderer(renderer);
 	}
@@ -99,7 +102,7 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 	public VisViewRenderer getRenderer() {
 		return renderer;
 	}
-	
+
 	public Camera getCamera() {
 		return camera;
 	}
@@ -135,12 +138,17 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 		startLayers();
 	}
 
+	private final NameResolver nameResolver = NameResolver.newRoot();
+
 	private void startTransformListener() {
-		Subscriber<tf.tfMessage> tfSubscriber = connectedNode.newSubscriber("tf_throttled", tf.tfMessage._TYPE);
+		Subscriber<tf.tfMessage> tfSubscriber = connectedNode.newSubscriber(TF_TOPIC, tf.tfMessage._TYPE);
 		tfSubscriber.addMessageListener(new MessageListener<tf.tfMessage>() {
 			@Override
 			public void onNewMessage(tf.tfMessage message) {
 				for(geometry_msgs.TransformStamped transform : message.getTransforms()) {
+					transform.setChildFrameId(nameResolver.resolve(transform.getChildFrameId()).toString());
+					Header header = transform.getHeader();
+					header.setFrameId(nameResolver.resolve(header.getFrameId()).toString());
 					frameTransformTree.update(transform);
 					frameTracker.receivedMessage(transform);
 				}
@@ -171,7 +179,7 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 	@Override
 	public void onError(Node node, Throwable throwable) {
 	}
-	
+
 	public FrameTransformTree getFrameTransformTree() {
 		return frameTransformTree;
 	}

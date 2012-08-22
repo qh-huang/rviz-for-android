@@ -52,6 +52,9 @@ public class OrbitCameraControlLayer extends DefaultLayer {
 	@Override
 	public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
 		if(gestureDetector != null) {
+			if(camera.getSelectionManager().getInteractiveControlManager().isMoving)
+				return false;
+			
 			if(gestureDetector.onTouchEvent(event)) {
 				return true;
 			}
@@ -112,7 +115,7 @@ public class OrbitCameraControlLayer extends DefaultLayer {
 					}
 
 					@Override
-					public boolean onScale(ScaleGestureDetector detector) {
+					public boolean onScale(ScaleGestureDetector detector) {						
 						Vector2 diff = prevScaleCenter.subtract(new Vector2(detector.getFocusX(), detector.getFocusY()));
 						if(enableScrolling)
 							cam.moveCameraScreenCoordinates((float) diff.getX() / 50, (float) diff.getY() / 50);

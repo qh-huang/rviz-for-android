@@ -27,9 +27,9 @@ public class Ray {
 		this.start = start;
 		this.direction = direction;
 	}
-	
+
 	public static Ray constructRay(Vector3 start, Vector3 end) {
-		return new Ray(start, end.subtract(start));
+		return new Ray(start, end.subtract(start).normalize());
 	}
 
 	public Vector3 getStart() {
@@ -41,14 +41,14 @@ public class Ray {
 	}
 
 	public Vector3 getPoint(double length) {
-		return start.add(new Vector3(direction.getX()*length, direction.getY()*length, direction.getZ()*length));
+		return start.add(new Vector3(direction.getX() * length, direction.getY() * length, direction.getZ() * length));
 	}
-	
+
 	/**
 	 * Finds the closest point on this ray to another ray. Assumes that this is the target ray
 	 * 
 	 * @param other
-	 * @return
+	 * @return the closest point on this ray to the other ray
 	 */
 	public Vector3 getClosestPoint(Ray other) {
 		Vector3 v13 = this.getStart().subtract(other.getStart());
@@ -68,8 +68,17 @@ public class Ray {
 
 		double numer = d1343 * d4321 - d1321 * d4343;
 		double mua = numer / denom;
-		
 		return getPoint(mua);
+	}
+
+	/**
+	 * Finds the closest point on this ray to a point.
+	 * 
+	 * @param other
+	 * @return the closest point on this ray to the other point
+	 */
+	public Vector3 getClosestPoint(Vector3 other) {
+		return start.add(direction.scale(other.subtract(start).dotProduct(direction)));
 	}
 
 	@Override

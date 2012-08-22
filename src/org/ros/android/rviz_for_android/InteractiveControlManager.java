@@ -83,6 +83,8 @@ public class InteractiveControlManager {
 	}
 
 	private InteractiveObject activeObject;
+	
+	public boolean isMoving = false;
 
 	public InteractiveControlManager(AngleControlView acView, TranslationControlView tcView, Translation2DControlView tcView2D) {
 		angleControl = acView;
@@ -96,6 +98,7 @@ public class InteractiveControlManager {
 				if(interactionMode == InteractionMode.MOVE_ROTATE) {
 					activeControl = translateControl2D;
 					handler.sendEmptyMessage(MSG_HIDE);
+					isMoving = true;
 				}
 			}
 		});
@@ -106,6 +109,7 @@ public class InteractiveControlManager {
 				if(interactionMode == InteractionMode.MOVE_ROTATE) {
 					activeControl = translateControl2D;
 					handler.sendEmptyMessage(MSG_SHOW);
+					isMoving = false;
 				}
 			}
 		});
@@ -113,8 +117,14 @@ public class InteractiveControlManager {
 		tcView.setOnMoveListener(new OnMoveListener() {
 			@Override
 			public void onMove(float X, float Y) {
+				isMoving = true;
 				translateControl.setVisibility(TranslationControlView.INVISIBLE);
 				activeObject.translate(X, Y);
+			}
+
+			@Override
+			public void onMoveStart() {
+				activeObject.translateStart();
 			}
 		});
 
@@ -122,6 +132,7 @@ public class InteractiveControlManager {
 			@Override
 			public void mouseUp(MotionEvent e) {
 				translateControl.setVisibility(TranslationControlView.VISIBLE);
+				isMoving = false;
 			}
 		});
 
@@ -130,6 +141,10 @@ public class InteractiveControlManager {
 			public void onMove(float X, float Y) {
 				translateControl2D.setVisibility(Translation2DControlView.INVISIBLE);
 				activeObject.translate(X, Y);
+				isMoving = true;
+			}
+			@Override
+			public void onMoveStart() {
 			}
 		});
 
@@ -137,6 +152,7 @@ public class InteractiveControlManager {
 			@Override
 			public void mouseUp(MotionEvent e) {
 				translateControl2D.setVisibility(Translation2DControlView.VISIBLE);
+				isMoving = false;
 			}
 		});
 	}

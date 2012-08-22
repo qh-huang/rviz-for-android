@@ -34,4 +34,6 @@ public interface InteractiveObject {
 	public int[] getPosition();
 
 	public InteractionMode getInteractionMode();
+
+	public void translateStart();
 }

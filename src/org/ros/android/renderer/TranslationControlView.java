@@ -19,6 +19,7 @@ public class TranslationControlView extends View implements OnGestureListener {
 
 	public interface OnMoveListener {
 		public void onMove(float X, float Y);
+		public void onMoveStart();
 	}
 	public interface OnMouseUpListener {
 		public void mouseUp(MotionEvent e);
@@ -27,6 +28,10 @@ public class TranslationControlView extends View implements OnGestureListener {
 	private static final OnMoveListener DEFAULT_ONMOVE_LISTENER = new OnMoveListener() {
 		@Override
 		public void onMove(float dX, float dY) {
+		}
+
+		@Override
+		public void onMoveStart() {
 		}
 	};
 	
@@ -158,10 +163,17 @@ public class TranslationControlView extends View implements OnGestureListener {
 		return false;
 	}
 
+	private boolean moving = false;
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_UP)
+		if(event.getAction() == MotionEvent.ACTION_UP) {
 			mouseUpListener.mouseUp(event);
+			moving = false;
+		} else if(!moving) {
+			moving = true;
+			moveListener.onMoveStart();
+		}	
 		
 		if(gestureDetector.onTouchEvent(event)) {
 			return true;
