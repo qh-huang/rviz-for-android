@@ -44,7 +44,7 @@ public class VisualizationView extends GLSurfaceView implements NodeMain {
 
 	private static final int TF_MESSAGE_QUEUE = 5;
 
-	private static final String TF_TOPIC = "tf"; // "tf_throttled";
+	private static final String TF_TOPIC = "tf_throttled";
 
 	private RenderRequestListener renderRequestListener;
 
