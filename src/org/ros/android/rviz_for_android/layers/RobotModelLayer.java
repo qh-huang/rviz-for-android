@@ -202,9 +202,9 @@ public class RobotModelLayer extends DefaultLayer implements LayerWithProperties
 			ud = (UrdfDrawable) cm;
 		} else if(meshResourceName.toLowerCase().endsWith(".stl")) {
 			StlMesh sm = StlMesh.newFromFile(meshResourceName, cam);
-			sm.registerSelectable();
 			if(sm == null)
 				return false;
+			sm.registerSelectable();
 			ud = (UrdfDrawable) sm;
 		} else {
 			Log.e("RobotModel", "Unknown mesh type! " + meshResourceName);
@@ -223,9 +223,8 @@ public class RobotModelLayer extends DefaultLayer implements LayerWithProperties
 		this.params = node.getParameterTree();
 
 		parameter = DEFAULT_PARAM_VALUE;
-		reloadUrdf();
-
 		statusController = new FrameCheckStatusPropertyController(prop.<ReadOnlyProperty> getProperty("Status"), camera, frameTransformTree);
+		reloadUrdf();
 	}
 
 	private void reloadUrdf() {
