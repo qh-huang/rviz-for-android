@@ -29,7 +29,7 @@ import org.ros.android.rviz_for_android.urdf.UrdfDrawable;
 import org.ros.rosjava_geometry.Transform;
 
 public class Cube extends BufferedTrianglesShape implements UrdfDrawable, Selectable {
-	private static final Color baseColor = new Color(.5f,.5f,0f,1f);
+	private static final Color baseColor = new Color(.5f,.5f,.5f,1f);
 	
 	private static final float cubeVertices[] = {
 		 -0.5f, -0.5f,  0.5f,	//[0]

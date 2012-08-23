@@ -139,7 +139,9 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 	private static final Transform SECOND_ARROW_TRANSFORM = new Transform(SECOND_ARROW_TRANSLATE, SECOND_ARROW_ROTATE);
 
 	private boolean isViewFacing = false;
-
+	
+	private static final Color MSG_MARKER_COLOR = new Color(0.5f, 0.5f, 0.5f, 1f); 
+	
 	private void autoCompleteMarker(visualization_msgs.InteractiveMarkerControl msg) {
 		// Generate a control marker corresponding to the control type
 		switch(msg.getInteractionMode()) {
@@ -162,7 +164,7 @@ public class InteractiveMarkerControl implements InteractiveObject, Cleanable {
 			markers.add(instantiateControlMarker(arrowTwo, generateColor(myOrientation), cam));
 			break;
 		case visualization_msgs.InteractiveMarkerControl.MENU:
-			markers.add(instantiateControlMarker(new Cube(cam), generateColor(myOrientation), cam));
+			markers.add(instantiateControlMarker(new Cube(cam),MSG_MARKER_COLOR, cam));
 			break;
 		default:
 			return;
