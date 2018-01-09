@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.nerd3c.rviz_for_android"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+            }
+        }
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
+    compile 'org.ros.rosjava_core:rosjava:0.3.5'
+    compile 'org.ros.rosjava_core:rosjava_geometry:0.3.5'
+    compile 'org.ros.rosjava_core:rosjava_helpers:0.3.5'
+    compile 'org.ros.rosjava_bootstrap:gradle_plugins:0.3.0'
+    compile 'org.ros.rosjava_bootstrap:message_generation:0.3.0'
+    compile 'org.ros.rosjava_messages:common_msgs:1.10.2'
+    compile 'org.ros.rosjava_messages:costmap_2d:1.11.4'
+    compile 'org.ros.rosjava_messages:map_msgs:0.0.2'
+    compile 'org.ros.rosjava_messages:std_msgs:0.5.10'
+    compile 'org.ros.rosjava_messages:tf:1.11.8'
+    compile 'org.ros.rosjava_messages:tf2_geometry_msgs:0.4.7'
+    compile 'org.ros.rosjava_messages:tf2_msgs:0.5.15'
+    compile 'org.ros.rosjava_messages:visualization_msgs:1.12.5'
+    compile 'org.ros.android_core:android_10:0.3.3'
+    compile 'org.ros.android_core:android_15:0.3.3'
+    // https://mvnrepository.com/artifact/com.ximpleware/vtd-xml
+    compile group: 'com.ximpleware', name: 'vtd-xml', version: '2.11'
+    compile 'com.android.support:multidex:1.0.2'
+}

@@ -14,5 +14,56 @@
  * the License.
  */
 
-debug.dependsOn project(':android_honeycomb_mr2').tasks.debug
+buildscript {
+    
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        
 
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    String rosMavenPath = System.getenv("ROS_MAVEN_PATH")
+    String rosMavenRepository = System.getenv("ROS_MAVEN_REPOSITORY")
+    repositories {
+        if (rosMavenPath != null) {
+            rosMavenPath.tokenize(":").each { path ->
+                maven {
+                    // We can't use uri() here because we aren't running inside something
+                    // that implements the Script interface.
+                    url "file:${path}"
+                }
+            }
+        }
+        maven {
+            url "http://repository.springsource.com/maven/bundles/release"
+        }
+        maven {
+            url "http://repository.springsource.com/maven/bundles/external"
+        }
+        if (rosMavenRepository != null) {
+            maven {
+                url rosMavenRepository
+            }
+        }
+        maven {
+            url "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
+        }
+        mavenCentral()
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
