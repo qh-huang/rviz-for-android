@@ -3,12 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <!--android.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"/-->
+
     <com.nerd3c.renderer.VisualizationView
         android:id="@+id/visualization"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 
     <com.nerd3c.renderer.AngleControlView
         android:id="@+id/acAngleControl"

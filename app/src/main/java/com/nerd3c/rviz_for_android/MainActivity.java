@@ -53,6 +53,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,7 +79,7 @@ public class MainActivity extends RosActivity {
     private Toast msgToast;
 
     // Tracking layers
-    public static enum AvailableLayerType {
+    public enum AvailableLayerType {
         Axis("Axis"),
         Grid("Grid"),
         RobotModel("Robot Model"),
@@ -104,7 +105,7 @@ public class MainActivity extends RosActivity {
         public int getCount() {
             return count++;
         }
-    };
+    }
 
     private static final AvailableLayerType[] availableLayers = AvailableLayerType.values();
     private static CharSequence[] availableLayerNames;
@@ -148,8 +149,10 @@ public class MainActivity extends RosActivity {
 
         // Configure the action bar
         ActionBar ab = getActionBar();
-        ab.setDisplayShowHomeEnabled(false);
-        ab.setDisplayShowTitleEnabled(false);
+        //ab.setDisplayShowHomeEnabled(false);
+        ab.setDisplayShowHomeEnabled(true);
+        //ab.setDisplayShowTitleEnabled(false);
+        ab.setDisplayShowTitleEnabled(true);
         ab.setDisplayShowCustomEnabled(true);
         menu.setGroupEnabled(R.id.unfollowGroup, following);
         return true;
@@ -387,6 +390,9 @@ public class MainActivity extends RosActivity {
     }
 
     private void configureGUI() {
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setActionBar(toolbar);
+
         addLayer = (Button) findViewById(R.id.add_layer);
         remLayer = (Button) findViewById(R.id.remove_layer);
         nameLayer = (Button) findViewById(R.id.rename_layer);

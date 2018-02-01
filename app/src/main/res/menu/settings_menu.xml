@@ -13,8 +13,8 @@
         android:checkable="true"
         android:orderInCategory="4"
         android:showAsAction="withText|always"
-        android:title="Layers"/>
-    <!--android:icon="@drawable/layers"-->
+        android:title="Layers"
+        android:icon="@drawable/layers"/>
 
     <!--
          <item
@@ -28,16 +28,16 @@
         android:id="@+id/menu_follow"
         android:orderInCategory="2"
         android:showAsAction="withText|always"
-        android:title="Follow"/>
-    <!--android:icon="@drawable/lock"-->
+        android:title="Follow"
+        android:icon="@drawable/lock"/>
 
 <group android:id="@+id/unfollowGroup" >
     <item
         android:id="@+id/menu_unfollow"
         android:orderInCategory="1"
         android:showAsAction="withText|always"
-        android:title="Unfollow"/>
-    <!--android:icon="@drawable/unlock"-->
+        android:title="Unfollow"
+        android:icon="@drawable/unlock"/>
 </group>
 
 </menu>
