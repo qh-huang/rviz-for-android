@@ -17,7 +17,8 @@
 package com.nerd3c.renderer.layer;
 
 import com.nerd3c.renderer.Camera;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;

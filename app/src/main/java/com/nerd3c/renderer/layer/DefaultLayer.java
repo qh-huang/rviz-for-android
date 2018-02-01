@@ -22,7 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.nerd3c.renderer.Camera;
 import com.nerd3c.renderer.RenderRequestListener;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.rosjava_geometry.FrameTransformTree;

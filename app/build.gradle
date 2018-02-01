@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.nerd3c.rviz_for_android"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

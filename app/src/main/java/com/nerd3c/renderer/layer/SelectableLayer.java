@@ -21,6 +21,6 @@ import java.util.Set;
 import javax.microedition.khronos.opengles.GL10;
 
 public interface SelectableLayer extends Layer {
-	public void selectionDraw(GL10 glUnused);
-	public Set<Selectable> getSelectables();
+	void selectionDraw(GL10 glUnused);
+	Set<Selectable> getSelectables();
 }

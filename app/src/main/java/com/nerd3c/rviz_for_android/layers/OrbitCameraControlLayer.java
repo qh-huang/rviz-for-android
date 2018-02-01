@@ -18,7 +18,8 @@ package com.nerd3c.rviz_for_android.layers;
 
 import com.nerd3c.renderer.Camera;
 import com.nerd3c.renderer.OrbitCamera;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import com.nerd3c.renderer.layer.DefaultLayer;
 import com.nerd3c.rviz_for_android.geometry.Vector2;
 import org.ros.node.ConnectedNode;

@@ -26,7 +26,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.nerd3c.renderer.Camera;
 import com.nerd3c.renderer.Utility;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import com.nerd3c.renderer.layer.DefaultLayer;
 import com.nerd3c.renderer.layer.Selectable;
 import com.nerd3c.renderer.layer.SelectableLayer;

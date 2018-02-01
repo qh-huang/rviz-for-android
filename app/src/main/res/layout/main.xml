@@ -9,7 +9,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"/-->
 
-    <com.nerd3c.renderer.VisualizationView
+    <!--com.nerd3c.renderer.VisualizationView-->
+    <org.ros.android.view.visualization.VisualizationView
         android:id="@+id/visualization"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

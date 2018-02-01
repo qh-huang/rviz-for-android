@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 public class AvailableFrameTracker {
 	public interface FrameAddedListener {
-		public void informFrameAdded(Set<String> newFrames);
+		void informFrameAdded(Set<String> newFrames);
 	}
 
 	private SortedSet<String> availableFrames = new TreeSet<String>();

@@ -20,9 +20,11 @@ package com.nerd3c.rviz_for_android.layers;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.nerd3c.renderer.Camera;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import com.nerd3c.renderer.layer.DefaultLayer;
-import com.nerd3c.renderer.layer.TfLayer;
+//import com.nerd3c.renderer.layer.TfLayer;
+import org.ros.android.view.visualization.layer.TfLayer;
 import com.nerd3c.rviz_for_android.MainActivity.AvailableLayerType;
 import com.nerd3c.rviz_for_android.drawable.Axis;
 import com.nerd3c.rviz_for_android.prop.BoolProperty;

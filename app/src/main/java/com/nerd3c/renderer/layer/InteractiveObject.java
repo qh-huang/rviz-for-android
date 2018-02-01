@@ -21,19 +21,19 @@ import com.nerd3c.rviz_for_android.geometry.Vector2;
 
 public interface InteractiveObject {
 			
-	public void rotate(float dTheta);
+	void rotate(float dTheta);
 	
-	public void translate(float X, float Y);
+	void translate(float X, float Y);
 	
-	public Vector2 getScreenMotionVector();
+	Vector2 getScreenMotionVector();
 
-	public void mouseDown();
+	void mouseDown();
 
-	public void mouseUp();
+	void mouseUp();
 	
-	public int[] getPosition();
+	int[] getPosition();
 
-	public InteractionMode getInteractionMode();
+	InteractionMode getInteractionMode();
 
-	public void translateStart();
+	void translateStart();
 }

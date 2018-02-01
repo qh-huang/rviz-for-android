@@ -21,11 +21,9 @@ import java.util.Map;
 import javax.microedition.khronos.opengles.GL10;
 
 public interface Selectable {
-
-	public boolean isSelected();
-	public void setSelected(boolean isSelected);
-	public Map<String, String> getInfo();
-	public void selectionDraw(GL10 glUnused);
-	public InteractiveObject getInteractiveObject();
-
+	boolean isSelected();
+	void setSelected(boolean isSelected);
+	Map<String, String> getInfo();
+	void selectionDraw(GL10 glUnused);
+	InteractiveObject getInteractiveObject();
 }

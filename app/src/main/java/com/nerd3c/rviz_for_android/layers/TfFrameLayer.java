@@ -26,7 +26,8 @@ import com.nerd3c.renderer.AvailableFrameTracker;
 import com.nerd3c.renderer.AvailableFrameTracker.FrameAddedListener;
 import com.nerd3c.renderer.Camera;
 import com.nerd3c.renderer.Utility;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import com.nerd3c.renderer.layer.DefaultLayer;
 import com.nerd3c.rviz_for_android.MainActivity.AvailableLayerType;
 import com.nerd3c.rviz_for_android.drawable.Axis;
@@ -40,8 +41,6 @@ import org.ros.node.Node;
 import org.ros.rosjava_geometry.FrameTransformTree;
 
 import android.os.Handler;
-
-import static com.nerd3c.rviz_for_android.MainActivity.AvailableLayerType.Axis;
 
 public class TfFrameLayer extends DefaultLayer implements LayerWithProperties {
 

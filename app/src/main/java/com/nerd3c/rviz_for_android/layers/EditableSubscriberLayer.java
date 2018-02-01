@@ -17,8 +17,10 @@
 package com.nerd3c.rviz_for_android.layers;
 
 import com.nerd3c.renderer.Camera;
-import com.nerd3c.renderer.VisualizationView;
-import com.nerd3c.renderer.layer.SubscriberLayer;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
+//import com.nerd3c.renderer.layer.SubscriberLayer;
+import org.ros.android.view.visualization.layer.SubscriberLayer;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;

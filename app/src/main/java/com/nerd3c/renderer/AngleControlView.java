@@ -7,15 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class AngleControlView extends View implements android.view.GestureDetector.OnGestureListener {
 	
-	public static interface OnAngleChangeListener {
-		public void angleChange(float newAngle, float delta); 
+	public interface OnAngleChangeListener {
+		void angleChange(float newAngle, float delta);
 	}
 	
 	private static Paint paint;

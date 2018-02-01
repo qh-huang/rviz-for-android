@@ -21,6 +21,7 @@ import geometry_msgs.Point32;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.nerd3c.renderer.Camera;
+//import org.ros.android.view.visualization.layer.TfLayer;
 import com.nerd3c.renderer.layer.TfLayer;
 import com.nerd3c.renderer.shapes.Color;
 import com.nerd3c.rviz_for_android.MainActivity.AvailableLayerType;

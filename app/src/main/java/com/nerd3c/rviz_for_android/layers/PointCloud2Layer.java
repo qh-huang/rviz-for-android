@@ -20,7 +20,8 @@ package com.nerd3c.rviz_for_android.layers;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.nerd3c.renderer.Camera;
-import com.nerd3c.renderer.layer.TfLayer;
+//import com.nerd3c.renderer.layer.TfLayer;
+import org.ros.android.view.visualization.layer.TfLayer;
 import com.nerd3c.renderer.shapes.Color;
 import com.nerd3c.rviz_for_android.MainActivity.AvailableLayerType;
 import com.nerd3c.rviz_for_android.drawable.PointCloud2GL;

@@ -25,7 +25,8 @@ import com.nerd3c.renderer.AngleControlView;
 import com.nerd3c.renderer.Camera;
 import com.nerd3c.renderer.Translation2DControlView;
 import com.nerd3c.renderer.TranslationControlView;
-import com.nerd3c.renderer.VisualizationView;
+//import com.nerd3c.renderer.VisualizationView;
+import org.ros.android.view.visualization.VisualizationView;
 import com.nerd3c.renderer.layer.DefaultLayer;
 import com.nerd3c.renderer.layer.Layer;
 import com.nerd3c.rviz_for_android.layers.AxisLayer;
@@ -42,6 +43,8 @@ import com.nerd3c.rviz_for_android.prop.LayerWithProperties;
 import com.nerd3c.rviz_for_android.prop.Property;
 import com.nerd3c.rviz_for_android.prop.PropertyListAdapter;
 import com.nerd3c.rviz_for_android.urdf.ServerConnection;
+
+import org.ros.android.view.visualization.XYOrthographicCamera;
 import org.ros.namespace.GraphName;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
@@ -53,7 +56,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -304,7 +306,7 @@ public class MainActivity extends RosActivity {
     }
 
     private DefaultLayer addNewLayer(AvailableLayerType layertype) {
-        Camera cam = visualizationView.getCamera();
+        XYOrthographicCamera cam = visualizationView.getCamera();
         if(visualizationView.getCamera() == null)
             throw new IllegalArgumentException("Can not instantiate new layer, camera is null!");
 
